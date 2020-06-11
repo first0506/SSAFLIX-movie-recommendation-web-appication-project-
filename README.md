@@ -24,7 +24,9 @@ master branch로 이동
 $ git checkout master
 ```
 
-
+```bash
+$ git merge <branchname>
+```
 
 
 
