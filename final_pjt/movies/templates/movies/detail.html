@@ -2,17 +2,17 @@
 {% load bootstrap_pagination %}
 
 {% block content %}
-  <div>
-    <div style="position: absolute;">
+  <div class="d-inline-block" style="background-color: #141414;">
+    <!-- <div style="position: absolute;">
       <div style="position: relative;" class="m-5">
         <img height="400" src="https://image.tmdb.org/t/p/original/{{ movie.poster_path }}" alt="" class="d-inline mx-3">
-        <!-- <div class="d-inline">
+        <div class="d-inline">
           <div class="p-3 mb-2 bg-dark text-white d-flex">{{ movie.overview }}</div>  
-        </div>   -->
+        </div>  
       </div>  
-    </div>
-    <img width="100%" height="500" src="https://image.tmdb.org/t/p/original/{{ movie.backdrop_path }}" alt="">
-</div>
+    </div> -->
+    <img class="float-right" width="70%" height="500" src="https://image.tmdb.org/t/p/original/{{ movie.backdrop_path }}" alt="">
+  </div>
 
 <div class="container p-3 mb-2 bg text-white text-center" style="background-color: #141414;">
     <h2>REVIEW</h2>
@@ -36,8 +36,7 @@
             {% endfor %}
         </tbody>
     </table>
-    {% bootstrap_paginate page_obj range=5 show_prev_next="false" show_first_last="true" %}
+    {% bootstrap_paginate page_obj range=5 show_prev_next="false" show_first_last="true" extra_pagination_classes="justify-content-center" %}
 </div>
-
 
 {% endblock %}
