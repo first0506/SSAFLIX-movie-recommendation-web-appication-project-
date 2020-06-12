@@ -40,7 +40,3 @@ def login(request):
 def logout(request):
     auth_logout(request)
     return redirect('movies:index')
-
-def profile(request, username):
-    person = get_object_or_404(get_user_model(), username=username)
-    return render(request, )
