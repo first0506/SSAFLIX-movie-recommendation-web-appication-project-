@@ -2,41 +2,61 @@
 {% load bootstrap_pagination %}
 
 {% block content %}
-  <div class="d-inline-block" style="background-color: #141414;">
-    <!-- <div style="position: absolute;">
-      <div style="position: relative;" class="m-5">
-        <img height="400" src="https://image.tmdb.org/t/p/original/{{ movie.poster_path }}" alt="" class="d-inline mx-3">
-        <div class="d-inline">
-          <div class="p-3 mb-2 bg-dark text-white d-flex">{{ movie.overview }}</div>  
-        </div>  
-      </div>  
-    </div> -->
-    <img class="float-right" width="70%" height="500" src="https://image.tmdb.org/t/p/original/{{ movie.backdrop_path }}" alt="">
+  <div class="container-fluid" style="background-color: #141414;">
+    <div class="row" style="height: 500px;">
+      <div id="movie-info" class="col-md-4 my-auto">
+        <p id="movie-title" class="text-white">{{ movie.title }}</p>
+        <p id="movie-overview" class="text-white">{{ movie.overview }}</p>
+      </div>
+      <div id="backdrop_img" class="col-md-8"></div>
+    </div>
   </div>
 
-<div class="container p-3 mb-2 bg text-white text-center" style="background-color: #141414;">
-    <h2>REVIEW</h2>
-    <table class="table table-dark">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">제목</th>
-                <th scope="col">작성자</th>
-                <th scope="col">평점</th>
-            </tr>
-        </thead>
-        <tbody class="justify-content-center">
-            {% for movie in page_obj %}
-            <tr>
-                <th scope="row">{{ movie.id }}</th>
-                <td><a href="{% url 'movies:detail' movie.pk %}" class="text-decoration-none text-white">{{ movie.title }}</a></td>
-                <td>{{ movie.title }}</td>
-                <td>{{ movie.title }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    {% bootstrap_paginate page_obj range=5 show_prev_next="false" show_first_last="true" extra_pagination_classes="justify-content-center" %}
+ <div class="container text-white">
+  <button><a href="{% url 'movies:create' movie.pk %}">별점과 후기 남기기</a></button>
+ </div>
+
+  <div class="container text-white text-center p-3 mb-2 bg" style="background-color: #141414;">
+      <h2 class="my-3">REVIEW</h2>
+      <table class="table table-dark">
+          <thead>
+              <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">제목</th>
+                  <th scope="col">작성자</th>
+                  <th scope="col">평점</th>
+              </tr>
+          </thead>
+          <tbody class="justify-content-center">
+              {% for movie in page_obj %}
+              <tr>
+                  <th scope="row">{{ movie.id }}</th>
+                  <td><a href="{% url 'movies:detail' movie.pk %}" class="text-decoration-none text-white">{{ movie.title }}</a></td>
+                  <td>{{ movie.title }}</td>
+                  <td>{{ movie.title }}</td>
+              </tr>
+              {% endfor %}
+          </tbody>
+      </table>
+      {% bootstrap_paginate page_obj range=5 show_prev_next="false" show_first_last="true" extra_pagination_classes="justify-content-center" %}
+  </div>
 </div>
 
+<style>
+  #backdrop_img {
+    /* background-image: url("https://image.tmdb.org/t/p/original/{{ movie.backdrop_path }}"); */
+    background: linear-gradient(to left, transparent, #141414),
+                url("https://image.tmdb.org/t/p/original/{{ movie.backdrop_path }}");
+    background-size: cover;
+  }
+   #movie-info {
+    font-family: 'Do Hyeon', sans-serif;
+   }
+   #movie-title {
+     font-size: 3.5em;
+   }
+   #movie-overview {
+     font-size: large;
+   }
+</style>
 {% endblock %}

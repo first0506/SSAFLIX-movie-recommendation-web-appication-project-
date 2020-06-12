@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load crispy_forms_tags %}
+
+<div class="container text-white">
+    {% if request.resolver_match.url_name == 'create' %}
+        <h2>리뷰 작성</h2>
+    {% else %}
+        <h2>리뷰 수정</h2>
+    {% endif %}
+    <form action="{% url 'movies:create' movie.pk %}" method="POST">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <input type="submit" value="제출">
+    </form>
+    <a href="{% url 'movies:detail' movie.pk %}">BACK</a>
+</div>
+
+{% endblock %}

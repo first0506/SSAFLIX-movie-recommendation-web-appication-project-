@@ -23,6 +23,7 @@ class Movie(models.Model):
 class Review(models.Model):
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    title = models.CharField(max_length=100)
     content = models.TextField()
     like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='like_articles')
     hate_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='hate_articles')
