@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load bootstrap_pagination %}
+
+{% block content %}
+  <div class="d-inline-block" style="background-color: #141414;">
+    <!-- <div style="position: absolute;">
+      <div style="position: relative;" class="m-5">
+        <img height="400" src="https://image.tmdb.org/t/p/original/{{ movie.poster_path }}" alt="" class="d-inline mx-3">
+        <div class="d-inline">
+          <div class="p-3 mb-2 bg-dark text-white d-flex">{{ movie.overview }}</div>  
+        </div>  
+      </div>  
+    </div> -->
+    <img class="float-right" width="70%" height="500" src="https://image.tmdb.org/t/p/original/{{ movie.backdrop_path }}" alt="">
+  </div>
+
+<div class="container p-3 mb-2 bg text-white text-center" style="background-color: #141414;">
+    <h2>REVIEW</h2>
+    <table class="table table-dark">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">제목</th>
+                <th scope="col">작성자</th>
+                <th scope="col">평점</th>
+            </tr>
+        </thead>
+        <tbody class="justify-content-center">
+            {% for movie in page_obj %}
+            <tr>
+                <th scope="row">{{ movie.id }}</th>
+                <td><a href="{% url 'movies:detail' movie.pk %}" class="text-decoration-none text-white">{{ movie.title }}</a></td>
+                <td>{{ movie.title }}</td>
+                <td>{{ movie.title }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% bootstrap_paginate page_obj range=5 show_prev_next="false" show_first_last="true" extra_pagination_classes="justify-content-center" %}
+</div>
+
+{% endblock %}
