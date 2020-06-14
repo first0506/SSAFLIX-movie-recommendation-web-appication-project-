@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'bootstrap_pagination',
 
     'crispy_forms',
+    'jquery',
 ]
 
 MIDDLEWARE = [

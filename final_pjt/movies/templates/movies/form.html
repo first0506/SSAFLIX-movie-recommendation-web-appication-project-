@@ -2,19 +2,43 @@
 
 {% block content %}
 {% load crispy_forms_tags %}
+{% load bootstrap4 %}
 
 <div class="container text-white">
     {% if request.resolver_match.url_name == 'create' %}
-        <h2>리뷰 작성</h2>
-    {% else %}
-        <h2>리뷰 수정</h2>
+        <h2>게시글 작성</h2>
+    {% elif request.resolver_match.url_name == 'update' %}
+        <h2>게시글 수정</h2>
+    {% elif request.resolver_match.url_name == 'comment_create' %}
+        <h2>댓글 작성</h2>
+    {% elif request.resolver_match.url_name == '채ㅡㅡ둣_update' %}
+        <h2>댓글 수정</h2>
     {% endif %}
-    <form action="{% url 'movies:create' movie.pk %}" method="POST">
+
+    <span class="custom-br"></span>
+
+    <form action="" method="POST">
         {% csrf_token %}
-        {{ form|crispy }}
-        <input type="submit" value="제출">
+        {% bootstrap_form form %}
+        <button type="submit" class="btn btn-secondary float-right mx-3">완료</button>
     </form>
-    <a href="{% url 'movies:detail' movie.pk %}">BACK</a>
+
+    {% if request.resolver_match.url_name == 'create' %}
+        <a class="btn btn-secondary float-right" href="{% url 'movies:detail' movie.pk %}" role="button">뒤로가기</a>
+    {% else %}
+        <a class="btn btn-secondary float-right" href="{% url 'movies:review_detail' movie.pk review.pk %}" role="button">뒤로가기</a>
+    {% endif %}
 </div>
+
+<style>
+    .custom-br {
+      display:block;
+      width: 100%;
+      height: 3px;
+      background-color: white; /*change color*/
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+    </style>
 
 {% endblock %}
