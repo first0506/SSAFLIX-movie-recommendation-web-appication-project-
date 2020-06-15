@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'bootstrap_pagination',
 
     'crispy_forms',
+    'jquery',
 ]
 
 MIDDLEWARE = [
@@ -127,3 +128,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+AUTH_USER_MODEL = 'accounts.User'
