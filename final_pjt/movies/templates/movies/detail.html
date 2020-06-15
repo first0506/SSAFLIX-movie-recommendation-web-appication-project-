@@ -6,6 +6,13 @@
   <div class="container-fluid mb-3" style="background-color: #141414;">
     <div class="row" style="height: 700px;">
       <div id="movie-info" class="col-0 col-sm-4 my-auto">
+        <div class="text-right" style="color:yellow; font-size: larger;">
+          {% if avg_rank == 0 %}
+            <p>등록된 별점이 없습니다.</p>
+          {% else %}
+            <p>평균별점: {{ avg_rank }}</p>
+          {% endif %}
+        </div>
         <p id="movie-title" class="text-white">{{ movie.title }}</p>
         <p id="movie-overview" class="text-white">{{ movie.overview }}</p>
       </div>
@@ -40,7 +47,7 @@
                   <th scope="col">#</th>
                   <th scope="col">제목</th>
                   <th scope="col">작성자</th>
-                  <th scope="col">평점</th>
+                  <th scope="col">좋아요</th>
               </tr>
           </thead>
           <tbody class="justify-content-center">
@@ -49,7 +56,7 @@
                   <th scope="row">{{ review.pk }}</th>
                   <td><a href="{% url 'movies:review_detail' movie.pk review.pk %}" class="text-decoration-none text-white">{{ review.title }}</a></td>
                   <td>{{ review.user }}</td>
-                  <td>{{ movie.title }}</td>
+                  <td>{{ review.like_users.all|length }}</td>
               </tr>
               {% endfor %}
           </tbody>
@@ -114,6 +121,7 @@
       error: function(error) {
         console.log('실패')
         console.log(error)
+        alert('로그인 해주세요')
       }
     })
   })
@@ -132,6 +140,7 @@
       error: function(error) {
         console.log('실패')
         console.log(error)
+        alert('로그인 해주세요')
       }
     })
   })
