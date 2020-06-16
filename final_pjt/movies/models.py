@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 # Create your models here.
 class Genre(models.Model):
@@ -18,7 +19,11 @@ class Movie(models.Model):
     poster_path = models.CharField(max_length=100)
     backdrop_path = models.CharField(max_length=100)
     genres = models.ManyToManyField(Genre, related_name='genre_movie')
-    rank = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='rank_movies')
+
+class Rank(models.Model):
+    num = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)])
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
 
 class Review(models.Model):
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)

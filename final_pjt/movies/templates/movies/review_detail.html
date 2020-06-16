@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+{% load bootstrap_pagination %}
+{% load bootstrap4 %}
+
+{% block content %}
+<div class="container text-white">
+    <div class="text-center">
+        <h1 class="py-3">게시글 상세보기</h1>
+    </div>
+    
+    <span class="custom-br"></span>
+
+    <div class="row">
+        <div class="col-9">
+            <p>제목 : {{ review.title }}</p>
+            <p>작성자 : {{ review.user }}</p>
+            내용 :<p>{{ review.content }}</p>
+            {% if request.user in review.like_users.all %}
+                <button class="like-button btn btn-success">
+                    좋아요 <span id="like-count-{{ movie.pk }}" class="badge badge-light">{{ review.like_users.all|length }}</span>
+                    <span class="sr-only">unread messages</span></button>
+            {% else %}
+                <button class="like-button btn btn-secondary">
+                    좋아요 <span id="like-count-{{ movie.pk }}" class="badge badge-light">{{ review.like_users.all|length }}</span>
+                    <span class="sr-only">unread messages</span></button>
+            {% endif %}
+
+            {% if request.user in review.hate_users.all %}
+                <button class="hate-button btn btn-danger">
+                    싫어요 <span id="hate-count-{{ movie.pk }}" class="badge badge-light">{{ review.hate_users.all|length }}</span>
+                    <span class="sr-only">unread messages</span></button>
+            {% else %}
+                <button class="hate-button btn btn-secondary">
+                    싫어요 <span id="hate-count-{{ movie.pk }}" class="badge badge-light">{{ review.hate_users.all|length }}</span>
+                    <span class="sr-only">unread messages</span></button>
+            {% endif %}
+            
+            {% for rankk in review.user.rank_set.all %}
+                {% if rankk.movie == movie %}
+                    <p class="text-right">평점: <span style="color: yellow;">★</span> x {{ rankk.num }}</p>
+                {% endif %}
+            {% endfor %}
+            <p class="text-right">생성: {{ review.created_at }}</p>
+            <p class="text-right">수정: {{ review.updated_at }}</p>
+        </div>
+        <div class="col-3">
+            <img class="img-fluid" src="https://image.tmdb.org/t/p/original/{{ movie.poster_path }}" alt="movie-poster">
+        </div>
+    </div>
+
+    <!-- <span class="custom-br"></span> -->
+
+    <a  class="btn btn-secondary float-right mx-3" href="{% url 'movies:detail' movie.pk %}" role="button">뒤로가기</a>
+    <a  class="btn btn-secondary float-left mx-3" href="{% url 'movies:update' movie.pk review.pk %}" role="button">수정</a>
+    <form action="{% url 'movies:delete' movie.pk review.pk %}" method="POST">
+        {% csrf_token %}
+        <button  class="btn btn-secondary" type="submit">삭제</button>
+    </form>
+    
+    <span class="custom-br"></span>
+
+    <h5 class="my-3">댓글목록 ({{ review.comment_set.all|length }}개의 댓글이 있습니다.)</h5>
+    {% for comment in review.comment_set.all %}
+        <div>
+            <p>작성자: {{ comment.user }}</p>
+            <p>내용: {{ comment.content }}</p>
+            {% if request.user == comment.user %}
+                <div class="text-right">
+                    <div class="d-inline-block">
+                        <a class="btn btn-secondary" href="{% url 'movies:comment_update' movie.pk review.pk comment.pk %}" role="button">수정</a>
+                    </div>
+                    <form class="d-inline-block" action="{% url 'movies:comment_delete' movie.pk review.pk comment.pk %}" method="POST">
+                        {% csrf_token %}
+                        <div class="text-right d-inline-block">
+                            <button class="btn btn-secondary mx-3" type="submit">삭제</button>
+                        </div>
+                    </form>
+                </div>
+            {% endif %}
+        </div>
+        <span class="custom-br"></span>
+    {% empty %}
+        <p>첫번째 댓글의 주인공이 되세요.</p>
+    {% endfor %}
+    
+    {% if user.is_authenticated %}
+    <form action="{% url 'movies:comment_create' movie.pk review.pk %}" method="POST">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <button class="btn btn-success float-right mx-3">댓글작성</button>
+    </form>
+    {% else %}
+    <p>댓글은 로그인이 필요합니다.</p><hr>
+    {% endif %}
+    <div style="background-color: #141414; height:100px;"></div>
+</div>
+
+<script>
+    movieId = {{ movie.pk }}
+    reviewId = {{ review.pk }}
+    const likeButtons = document.querySelectorAll('.like-button')
+    const hateButtons = document.querySelectorAll('.hate-button')
+    likeButtons.forEach(function(likeButton) {
+        likeButton.addEventListener('click', function() {
+            {% if request.user.is_authenticated %}
+            axios.get(`/movies/${movieId}/${reviewId}/like/`)
+                .then(response =>{
+                    if (response.data.liked && response.data.hated) {
+                        $(this).addClass('btn-success');
+                        hateButtons.forEach(function(hateButton) {
+                            $(hateButton).removeClass('btn-danger')
+                            $(hateButton).addClass('btn-secondary')
+                        })
+                    } else if (response.data.liked) {
+                        $(this).addClass('btn-success')
+                    } else {
+                        $(this).removeClass('btn-success')
+                        $(this).addClass('btn-secondary')
+                    }
+                    document.querySelector(`#like-count-${movieId}`).innerText = response.data.like_count
+                    document.querySelector(`#hate-count-${movieId}`).innerText = response.data.hate_count
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+            {% else %}
+                alert('로그인이 필요합니다.')
+            {% endif %}
+        })
+    })
+    hateButtons.forEach(function(hateButton) {
+        hateButton.addEventListener('click', function() {
+            {% if request.user.is_authenticated %}
+            axios.get(`/movies/${movieId}/${reviewId}/hate/`)
+                .then(response =>{
+                    if (response.data.liked && response.data.hated) {
+                        $(this).addClass('btn-danger');
+                        likeButtons.forEach(function(likeButton) {
+                            $(likeButton).removeClass('btn-success')
+                            $(likeButton).addClass('btn-secondary')
+                        })
+                    } else if (response.data.hated) {
+                        $(this).addClass('btn-danger')
+                    } else {
+                        $(this).removeClass('btn-danger')
+                        $(this).addClass('btn-secondary')
+                    }
+                    document.querySelector(`#like-count-${movieId}`).innerText = response.data.like_count
+                    document.querySelector(`#hate-count-${movieId}`).innerText = response.data.hate_count
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+            {% else %}
+                alert('로그인이 필요합니다.')
+            {% endif %}
+        })
+    })
+</script>
+
+<style>
+.custom-br {
+  display:block;
+  width: 100%;
+  height: 3px;
+  background-color: white; /*change color*/
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+</style>
+{% endblock %}
