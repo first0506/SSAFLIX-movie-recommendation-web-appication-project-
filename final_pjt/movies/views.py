@@ -3,12 +3,13 @@ from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.core.paginator import Paginator
-
+import json
 from .models import Movie, Genre, Review, Comment
 from .forms import ReviewForm, CommentForm
 
 # Create your views here.
 def index(request):
+
     return render(request, 'movies/index.html')
 
 def detail(request, movie_pk):

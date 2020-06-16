@@ -1,10 +1,17 @@
 {% extends 'base.html' %}
-{% load bootstrap4 %}
 
 {% block content %}
+{% load crispy_forms_tags %}
+<div class="container text-white">
+ {% if request.resolver_match.url_name == 'signup' %}
+        <h2>회원가입</h2>
+    {% else %}
+        <h2>로그인</h2>
+    {% endif %}
     <form action="" method="POST">
         {% csrf_token %}
-        {% bootstrap_form form %}
-        <button>작성</button>
+        {{ form|crispy }}
+        <input type="submit" value="제출">
     </form>
+</div>
 {% endblock content %}
