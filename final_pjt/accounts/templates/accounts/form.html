@@ -5,13 +5,19 @@
 <div class="container text-white">
  {% if request.resolver_match.url_name == 'signup' %}
         <h2>회원가입</h2>
-    {% else %}
-        <h2>로그인</h2>
-    {% endif %}
-    <form action="" method="POST">
+         <form action="" method="POST">
         {% csrf_token %}
         {{ form|crispy }}
-        <input type="submit" value="제출">
+        <button class="btn btn-secondary m-3" type="submit">가입하기</button>
     </form>
+    {% else %}
+        <h2>로그인</h2>
+         <form action="" method="POST">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button class="btn btn-secondary m-3" type="submit">로그인</button>
+    </form>
+    {% endif %}
+    <div style="background-color: #141414; height:700px;"></div>
 </div>
 {% endblock content %}

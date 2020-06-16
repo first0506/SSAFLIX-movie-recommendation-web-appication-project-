@@ -7,10 +7,21 @@ from django.core.paginator import Paginator
 from .models import Movie, Genre, Review, Comment, Rank
 from .forms import ReviewForm, CommentForm
 
+import random
 # Create your views here.
 def index(request):
-
-    return render(request, 'movies/index.html')
+    movies = Movie.objects.all()
+    #Random
+    moviesRandom = random.sample(list(movies),18)
+    movies_1=moviesRandom[:6]
+    movies_2=moviesRandom[6:12]
+    movies_3=moviesRandom[12:]
+    context ={
+        'movies_1':movies_1,
+        'movies_2': movies_2,
+        'movies_3': movies_3,
+    }
+    return render(request, 'movies/index.html', context)
 
 def detail(request, movie_pk):
     movie = get_object_or_404(Movie, pk = movie_pk)
