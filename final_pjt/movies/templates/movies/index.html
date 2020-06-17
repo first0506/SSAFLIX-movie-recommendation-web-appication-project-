@@ -1,95 +1,132 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<!-- MAIN CONTAINER -->
+<div class="container-fluid text-white pt-5">
+  <div>
+  <a href="{% url 'movies:detail' logomovie.pk %}"><img src="https://image.tmdb.org/t/p/original/{{ logomovie.backdrop_path }}" style="width:100%; height:100%" alt=""></a>
+  </div>
+
+  <div>
+    <h1>오늘의 추천 영화</h1>
+    <div id="carouselExampleIndicators" class="carousel slide carousel-multi-item" data-ride="carousel">
+      <div class="carousel-inner mx-5">
+        <div class="carousel-item active ">  
+            {% for movie in movies_1 %}
+
+            <a href="{% url 'movies:detail' movie.pk %}" class='m-1'><img  src="https://image.tmdb.org/t/p/original/{{ movie.poster_path }}" class="img-responsive" width = "15%" alt=""></a>
+            
+            {% endfor %}  
+
+        </div>
+        <div class="carousel-item">
+            {% for movie in movies_2 %}
+            
+            <a href="{% url 'movies:detail' movie.pk %}" class='m-1'><img  src="https://image.tmdb.org/t/p/original/{{ movie.poster_path }}" class="img-responsive" width = "15%" alt=""></a>
+            
+            {% endfor %}
+          </div>
+        <div class="carousel-item">
+          {% for movie in movies_3 %}
+
+          <a href="{% url 'movies:detail' movie.pk %}" class='m-1'><img  src="https://image.tmdb.org/t/p/original/{{ movie.poster_path }}" class="img-responsive" width = "15%" alt=""></a>
+          
+          {% endfor %}
+        </div>
+      </div>
+      <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
+  </div>
+
+<h1>좋아할 만한 장르 추천</h1>
+    <div id="highrank_genre_Indicators" class="carousel slide carousel-multi-item" data-ride="carousel">
+      <div class="carousel-inner mx-5">
+        <div class="carousel-item active">  
+            {% for movie in highrank_genre_front %}
+
+            <a href="{% url 'movies:detail' movie.pk %}" class='m-1'><img  src="https://image.tmdb.org/t/p/original/{{ movie.poster_path }}" class="img-responsive" width = "15%"  alt=""></a>
+            
+            {% endfor %}
+
+        </div>
+        <div class="carousel-item">
+            {% for movie in highrank_genre_end %}
+            
+            <a href="{% url 'movies:detail' movie.pk %}" class='m-1'><img  src="https://image.tmdb.org/t/p/original/{{ movie.poster_path }}" class="img-responsive" width = "15%" alt=""></a>
+            
+            {% endfor %}
+          </div>
+      </div>
+      <a class="carousel-control-prev" href="#highrank_genre_Indicators" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="carousel-control-next" href="#highrank_genre_Indicators" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
+  </div>
+
+{% if request.user.is_authenticated %}
+  <h1>내가 최근에 평점 준 영화</h1>
+    <div id="recent_moviesindicator" class="carousel slide carousel-multi-item" data-ride="carousel">
+      <div class="carousel-inner mx-5">
+        <div class="carousel-item active">  
+            {% for movie in recent_movies_front %}
+
+            <a href="{% url 'movies:detail' movie.pk %}" class='m-1'><img  src="https://image.tmdb.org/t/p/original/{{ movie.poster_path }}" class="img-responsive" width = "15%" alt=""></a>
+            
+            {% endfor %}
+
+        </div>
+      </div>
+  </div>
+{% endif %}
 
 
-    <!-- MAIN CONTAINER -->
-    <div class="container-fluid">
-     <a class="d-flex flex-column justify-content-center align-items-center" href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/p1.PNG?raw=true"class="img-fluid max-width:" alt=""></a>
-          <a class="btn btn-primary btn-lg mt-5" href="#">Let's Go</a>
-      <div class="location" id="home">
-        <h1>랜덤 추천</h1>
-        <div id="carouselExampleIndicators" class="carousel slide carousel-multi-item" data-ride="carousel">
-          <div class="carousel-inner">
+      <h1>높은 평점 받은 영화</h1>
+        <div id="highvote_movies_Indicators" class="carousel slide carousel-multi-item" data-ride="carousel">
+          <div class="carousel-inner mx-5">
             <div class="carousel-item active">  
-                {% for movie in movies_1 %}
+                {% for movie in highvote_movies_front %}
     
-                <a href="{% url 'movies:detail' movie.pk %}" ><img  src="https://image.tmdb.org/t/p/original/{{ movie.poster_path }}" class="img-responsive" width = "15%" alt=""></a>
+                <a href="{% url 'movies:detail' movie.pk %}" class='m-1'><img  src="https://image.tmdb.org/t/p/original/{{ movie.poster_path }}" class="img-responsive" width = "15%" alt=""></a>
                 
                 {% endfor %}
 
             </div>
             <div class="carousel-item">
-                {% for movie in movies_2 %}
+                {% for movie in highvote_movies_end %}
                 
-                <a href="{% url 'movies:detail' movie.pk %}" ><img  src="https://image.tmdb.org/t/p/original/{{ movie.poster_path }}" class="img-responsive" width = "15%" alt=""></a>
+                <a href="{% url 'movies:detail' movie.pk %}" class='m-1'><img  src="https://image.tmdb.org/t/p/original/{{ movie.poster_path }}" class="img-responsive" width = "15%" alt=""></a>
                 
                 {% endfor %}
               </div>
-            <div class="carousel-item">
-              {% for movie in movies_3 %}
-  
-              <a href="{% url 'movies:detail' movie.pk %}" ><img  src="https://image.tmdb.org/t/p/original/{{ movie.poster_path }}" class="img-responsive" width = "15%" alt=""></a>
-              
-              {% endfor %}
-            </div>
           </div>
-          <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+          <a class="carousel-control-prev" href="#highvote_movies_Indicators" role="button" data-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="sr-only">Previous</span>
           </a>
-          <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+          <a class="carousel-control-next" href="#highvote_movies_Indicators" role="button" data-slide="next">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="sr-only">Next</span>
           </a>
       </div>
 
-      <h1>인기</h1>
-      <div class="box">
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/o1.PNG?raw=true" alt=""></a>
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/o2.PNG?raw=true" alt=""></a>
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/o3.PNG?raw=true" alt=""></a>
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/o4.PNG?raw=true" alt=""></a>
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/o5.PNG?raw=true" alt=""></a>
-        <a href=""><img src="https://github.com/carlosavilae/Netflix-Clone/blob/master/img/o6.PNG?raw=true" alt=""></a>                
-      </div>
-
-    </div>
- 
-
 <style>
-.yourContainer {
-      width: 500px;
-    height: 170px;
+
+.carousel-control-prev {
+  width: 100px;
 }
-.yourContainer img {
-    max-width: 100%;
-    max-height: 100%;
+.carousel-control-next {
+  width: 100px;
 }
-.main-container {
-    padding: 50px;
-  }
-  
-  .box {
-    display: grid;
-    grid-gap: 20px;
-    grid-template-columns: repeat(6, minmax(100px, 1fr));
-  }
-  
-  .box a {
-    transition: transform .3s;  
-  }
-  
-  .box a:hover {
-    transition: transform .3s;
-    -ms-transform: scale(1.4);
-    -webkit-transform: scale(1.4);  
-    transform: scale(1.4);
-  }
-  
-  .box img {
-    border-radius: 2px;
-  }
-  
+
 </style>
 {% endblock %}

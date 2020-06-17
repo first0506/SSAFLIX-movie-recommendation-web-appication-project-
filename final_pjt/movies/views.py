@@ -16,10 +16,7 @@ def index(request):
     movies_1=moviesRandom[:6]
     movies_2=moviesRandom[6:12]
     movies_3=moviesRandom[12:]
-    context ={
-        'movies_1':movies_1,
-        'movies_2': movies_2,
-        'movies_3': movies_3,
+
     # 1. 사용자가 7점이상 평점을 준 영화 중 가장 많은 장르의 영화를 추천
     # 사용자가 로그인하고 평점을 준 영화가 있을 경우 (이미 평점을 준 영화 제외)
     # 목록이 12개가 안되면 모든 장르 영화 중 인기도순으로 채워넣는다.
@@ -48,10 +45,9 @@ def index(request):
                     break
     if len(highrank_genre)<12:
         for movie in Movie.objects.order_by('-popularity'):
-            if not Rank.objects.all().filter(user=request.user, movie=movie).exists():
-                highrank_genre.append(movie)
-                if len(highrank_genre)==12:
-                    break
+            highrank_genre.append(movie)
+            if len(highrank_genre)==12:
+                break
 
     highrank_genre_front = highrank_genre[:6]
     highrank_genre_end = highrank_genre[6:12]
@@ -60,7 +56,7 @@ def index(request):
     # 최근 평점을 준 순서대로 추출
     # index.html에 '사용자가 로그인을 했으면'이라는 조건 필요
     recent_movies = []
-    if Rank.objects.all().filter(user=request.user).exists():
+    if request.user.is_authenticated and Rank.objects.all().filter(user=request.user).exists():
         ranks = Rank.objects.all().filter(user=request.user).order_by('-pk')
         for rank in ranks:
             movie = rank.movie
@@ -82,7 +78,8 @@ def index(request):
     highvote_movies = Movie.objects.order_by('-vote_average')[:12]
     highvote_movies_front = highvote_movies[:6]
     highvote_movies_end = highvote_movies[6:]
-
+    logomovie = random.sample(highrank_genre,1)[0]
+  
     context = {
         'highrank_genre_front' : highrank_genre_front,
         'highrank_genre_end' : highrank_genre_end,
@@ -90,6 +87,10 @@ def index(request):
         'recent_movies_end' : recent_movies_end,
         'highvote_movies_front' : highvote_movies_front,
         'highvote_movies_end' : highvote_movies_end,
+        'movies_1':movies_1,
+        'movies_2': movies_2,
+        'movies_3': movies_3,
+        'logomovie': logomovie,
     }
     return render(request, 'movies/index.html', context)
 
